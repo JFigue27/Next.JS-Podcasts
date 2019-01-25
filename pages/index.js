@@ -1,36 +1,68 @@
 import React, { Component } from "react";
+import "isomorphic-fetch";
+import Link from "next/link";
 
-export default class Index extends Component {
+export default class extends Component {
+  static async getInitialProps() {
+    let data = await fetch("https://api.audioboom.com/channels/recommended");
+    let { body: channels } = await data.json();
+    return { channels };
+  }
+
   render() {
+    const { channels } = this.props;
     return (
       <div>
-        <h1>!Hola Inspiracode!</h1>
-        <p>!Bienvenidos al curso de Next.Js.!!!!</p>
+        <header>
+          {/* <img src="./static/IC-Logo.png" alt="" /> */}
+          PODCASTS
+        </header>
 
-        <img src="/static/IC-Logo.png" alt="Inspiracode.com" />
+        <div className="channels">
+          {channels.map(channel => (
+            <a className="channel" key={channel.id}>
+              <img src={channel.urls.logo_image.original} alt="" />
+              <h2>{channel.title}</h2>
+            </a>
+          ))}
+        </div>
 
         <style jsx>{`
-          h1 {
-            max-width: 50%;
-            display: block;
-            margin: 0 auto;
+          header {
+            color: #fff;
+            background: #8756ca;
+            padding: 15px;
             text-align: center;
           }
-          p {
-            max-width: 50%;
-            display: block;
-            margin: 0 auto;
-            text-align: center;
+          .channels {
+            display: grid;
+            grid-gap: 15px;
+            padding: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
           }
-          img {
-            max-width: 50%;
+          a.channel {
             display: block;
-            margin: 0 auto;
-            margin-top: 20px;
+            margin-bottom: 0.5em;
+            color: #333;
+            text-decoration: none;
+          }
+          .channel img {
+            border-radius: 3px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+            width: 100%;
+          }
+          h2 {
+            padding: 5px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 0;
+            text-align: center;
           }
         `}</style>
         <style jsx global>{`
           body {
+            margin: 0;
+            font-family: system-ui;
             background-color: white;
           }
         `}</style>
