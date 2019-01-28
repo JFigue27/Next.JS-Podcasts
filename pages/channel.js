@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Link from "next/link";
 
 export default class Channel extends Component {
   static async getInitialProps({ query }) {
@@ -27,18 +28,33 @@ export default class Channel extends Component {
     return (
       <div>
         <header>PODCASTS</header>
-        <div className="channels" />
+        <div className="banner" style={{ backgroundImage: `url(${channel.urls.banner_image.original})` }} />
         <h1> {channel.title} </h1>
 
-        <h2>Series</h2>
-
-        {series.map(serie => (
-          <div>{serie.title}</div>
-        ))}
+        {series.length > 0 && (
+          <div>
+            <h2>Series</h2>
+            <div className="channels">
+              {series.map(serie => (
+                <Link href={`/channel?id=${serie.id}`} prefetch>
+                  <a className="channel">
+                    <img src={`serie.urls.logo_image.original`} alt="" />
+                    <h2>{serie.title}</h2>
+                  </a>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         <h2>Ultimos Podcasts</h2>
         {audioClips.map(clip => (
-          <div>{clip.title}</div>
+          <Link href={`/podcast?id=${clip.id}`} prefetch key={clip.id}>
+            <a className="podcast">
+              <h3>{clip.title}</h3>
+              <div className="meta">{Math.ceil(clip.duration / 60)} minutes</div>
+            </a>
+          </Link>
         ))}
 
         <style jsx>{`
@@ -48,6 +64,15 @@ export default class Channel extends Component {
             padding: 15px;
             text-align: center;
           }
+
+          .banner {
+            width: 100%;
+            padding-bottom: 25%;
+            background-position: 50% 50%;
+            background-size: cover;
+            background-color: #aaa;
+          }
+
           .channels {
             display: grid;
             grid-gap: 15px;
@@ -76,12 +101,33 @@ export default class Channel extends Component {
             margin: 0;
             text-align: center;
           }
+
+          .podcast {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+          }
+          .podcast:hover {
+            color: #000;
+          }
+          .podcast h3 {
+            margin: 0;
+          }
+          .podcast .meta {
+            color: #666;
+            margin-top: 0.5em;
+            font-size: 0.8em;
+          }
         `}</style>
+
         <style jsx global>{`
           body {
             margin: 0;
             font-family: system-ui;
-            background-color: white;
+            background: white;
           }
         `}</style>
       </div>
