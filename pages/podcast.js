@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "isomorphic-fetch";
 import Link from "next/link";
 
-export default class Podcast extends Component {
+export default class extends Component {
   static async getInitialProps({ query }) {
     let id = query.id;
     let fetchClip = await fetch(`https://api.audioboom.com/audio_clips/${id}.mp3`);
