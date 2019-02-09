@@ -5,6 +5,10 @@ import ChannelSeries from "../components/ChannelSeries";
 import Error from "next/error";
 
 export default class extends Component {
+  state = {
+    openPodcast: null
+  };
+
   static async getInitialProps({ query, res }) {
     let idChannel = query.id;
 
@@ -34,8 +38,17 @@ export default class extends Component {
     }
   }
 
+  openPodcast = (event, podcast) => {
+    event.preventDefault();
+    this.setState({
+      openPodcast: podcast
+    });
+  };
+
   render() {
     const { channel, audioClips, series, statusCode } = this.props;
+    const { openPodcast } = this.state;
+
     if (statusCode !== 200) {
       return <Error statusCode={statusCode} />;
     }
@@ -47,6 +60,7 @@ export default class extends Component {
           </Link>
         </header>
         <div className="banner" style={{ backgroundImage: `url(${channel.urls.banner_image.original})` }} />
+        {openPodcast && <div>Hay un podcast abierto</div>}
         <h1> {channel.title} </h1>
         <ChannelSeries series={series} title="Series" />
         <ChannelAudioClips channelAudioClips={audioClips} title="Audio Clip" />
