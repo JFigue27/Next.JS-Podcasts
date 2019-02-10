@@ -1,10 +1,9 @@
-import React, { Component } from "react";
 import "isomorphic-fetch";
 import Layout from "../components/Layout";
 import ChannelGrid from "../components/ChannelGrid";
 import Error from "next/error";
 
-export default class extends Component {
+export default class extends React.Component {
   static async getInitialProps({ res }) {
     try {
       let data = await fetch("https://api.audioboom.com/channels/recommended");
